@@ -815,9 +815,3 @@ exports('GetItemCount', function(source, item)
     
     return count
 end)
-
-local player, distance = QBCore.Functions.GetClosestPlayer()
-if player ~= -1 and distance < 3.0 then
-    local targetServerId = GetPlayerServerId(player)
-    TriggerServerEvent('qb-inventory:server:openPlayerInventory', targetServerId)
-end
