@@ -815,3 +815,125 @@ exports('GetItemCount', function(source, item)
     
     return count
 end)
+
+-- Load Inventory (Required by qb-core)
+exports('LoadInventory', function(source, citizenid)
+    local inventory = MySQL.Sync.fetchScalar('SELECT inventory FROM players WHERE citizenid = ?', {citizenid})
+    return inventory and json.decode(inventory) or {}
+end)
+
+-- Save Inventory (Required by qb-core)
+exports('SaveInventory', function(source, offline)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return false end
+    
+    local items = Player.PlayerData.items
+    MySQL.Async.execute('UPDATE players SET inventory = ? WHERE citizenid = ?', {json.encode(items), Player.PlayerData.citizenid})
+    return true
+end)
+
+-- Clear Inventory
+exports('ClearInventory', function(source, filterItems)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return false end
+    
+    local items = Player.PlayerData.items
+    
+    if filterItems then
+        for slot, item in pairs(items) do
+            if item and not filterItems[item.name] then
+                items[slot] = nil
+            end
+        end
+    else
+        items = {}
+    end
+    
+    Player.Functions.SetPlayerData("items", items)
+    TriggerClientEvent('qb-inventory:client:updateInventory', source, items)
+    TriggerClientEvent('qb-inventory:client:updateHotbar', source, GetHotbarItems(items))
+    
+    return true
+end)
+
+-- Get Item By Name
+exports('GetItemByName', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return nil end
+    
+    local items = Player.PlayerData.items
+    
+    for _, slotItem in pairs(items) do
+        if slotItem and slotItem.name == item then
+            return slotItem
+        end
+    end
+    
+    return nil
+end)
+
+-- Get Items By Name
+exports('GetItemsByName', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return {} end
+    
+    local items = Player.PlayerData.items
+    local foundItems = {}
+    
+    for _, slotItem in pairs(items) do
+        if slotItem and slotItem.name == item then
+            table.insert(foundItems, slotItem)
+        end
+    end
+    
+    return foundItems
+end)
+
+-- Get Item By Slot
+exports('GetItemBySlot', function(source, slot)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return nil end
+    
+    return Player.PlayerData.items[slot]
+end)
+
+-- Set Item Data
+exports('SetItemData', function(source, item, key, val)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return false end
+    
+    local items = Player.PlayerData.items
+    
+    for slot, slotItem in pairs(items) do
+        if slotItem and slotItem.name == item then
+            if not slotItem.info then slotItem.info = {} end
+            slotItem.info[key] = val
+            Player.Functions.SetPlayerData("items", items)
+            TriggerClientEvent('qb-inventory:client:updateInventory', source, items)
+            return true
+        end
+    end
+    
+    return false
+end)
+
+-- Get Slots By Item
+exports('GetSlotsByItem', function(items, itemName)
+    local slots = {}
+    for slot, item in pairs(items) do
+        if item and item.name == itemName then
+            table.insert(slots, slot)
+        end
+    end
+    return slots
+end)
+
+-- Get First Slot By Item
+exports('GetFirstSlotByItem', function(items, itemName)
+    for slot, item in pairs(items) do
+        if item and item.name == itemName then
+            return slot
+        end
+    end
+    return nil
+end)
