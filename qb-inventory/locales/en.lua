@@ -1,0 +1,60 @@
+local Translations = {
+    error = {
+        ['not_enough_space'] = 'Not enough space in inventory',
+        ['not_enough_money'] = 'Not enough money',
+        ['item_not_found'] = 'Item not found',
+        ['cannot_carry'] = 'Cannot carry this item',
+        ['invalid_amount'] = 'Invalid amount',
+        ['no_access'] = 'You do not have access to this',
+        ['inventory_full'] = 'Inventory is full',
+        ['too_heavy'] = 'Too heavy to carry',
+        ['item_limit_reached'] = 'Item limit reached',
+        ['cannot_drop'] = 'Cannot drop this item here',
+        ['vehicle_locked'] = 'Vehicle is locked',
+        ['no_vehicle_nearby'] = 'No vehicle nearby',
+        ['trunk_occupied'] = 'Someone is already using the trunk',
+    },
+    success = {
+        ['item_received'] = 'Received %s x%s',
+        ['item_removed'] = 'Used %s',
+        ['item_dropped'] = 'Dropped %s x%s',
+        ['item_given'] = 'Gave %s x%s',
+        ['purchased'] = 'Purchased %s x%s for $%s',
+        ['sold'] = 'Sold %s x%s for $%s',
+    },
+    info = {
+        ['inventory'] = 'Inventory',
+        ['hotbar'] = 'Hotbar',
+        ['weight'] = 'Weight',
+        ['slots'] = 'Slots',
+        ['drop'] = 'Drop',
+        ['give'] = 'Give',
+        ['use'] = 'Use',
+        ['split'] = 'Split',
+        ['close'] = 'Close',
+        ['search'] = 'Search...',
+        ['trunk'] = 'Trunk',
+        ['glovebox'] = 'Glovebox',
+        ['stash'] = 'Stash',
+        ['shop'] = 'Shop',
+        ['crafting'] = 'Crafting',
+        ['amount'] = 'Amount',
+        ['price'] = 'Price',
+        ['buy'] = 'Buy',
+        ['sell'] = 'Sell',
+        ['total'] = 'Total',
+        ['confirm'] = 'Confirm',
+        ['cancel'] = 'Cancel',
+        ['ground'] = 'Ground',
+        ['nearby_player'] = 'Nearby Player',
+    },
+    keybinds = {
+        ['open_inventory'] = 'Open Inventory',
+        ['use_item'] = 'Use Item',
+    }
+}
+
+Lang = Lang or Locale:new({
+    phrases = Translations,
+    warnOnMissing = true
+})

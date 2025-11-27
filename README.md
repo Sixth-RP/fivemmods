@@ -1,2 +1,0 @@
-# fivemmods
-my fivem mods
